@@ -1,5 +1,6 @@
 import os
 import pdfplumber
+import sys
 from docx import Document
 
 def extract_text_from_pdf(filepath):
@@ -28,5 +29,9 @@ def parse_resume(filepath):
 
 # 🔍 Test
 if __name__ == "__main__":
-    test_file = "data/resumes/sample_resume.pdf"  # Change if needed
-    print(parse_resume(test_file)[:1000])
+    if len(sys.argv) < 2:
+        print("Usage: python resume_parser.py <resume_file_path>")
+        sys.exit(1)
+
+    resume_path = sys.argv[1]
+    print(parse_resume(resume_path)[:1000])
