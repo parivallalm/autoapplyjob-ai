@@ -1,5 +1,7 @@
+import sys
 import requests
 from bs4 import BeautifulSoup
+import os
 
 def extract_job_description(url: str) -> str:
     """
@@ -18,8 +20,18 @@ def extract_job_description(url: str) -> str:
     text = "\n".join([p.get_text(strip=True) for p in paragraphs])
     return text.strip()
 
-# Test run
 if __name__ == "__main__":
-    test_url = "https://example.com/sample-job-description"
-    jd_text = extract_job_description(test_url)
-    print(jd_text[:1000])
+    if len(sys.argv) < 2:
+        print("Usage: python jd_parser.py <job_description_url>")
+        sys.exit(1)
+
+    url = sys.argv[1]
+    jd_text = extract_job_description(url)
+
+    if jd_text.startswith("[ERROR]"):
+        print(jd_text)
+    else:
+        os.makedirs("data/job_descriptions", exist_ok=True)
+        with open("data/job_descriptions/sample_jd.txt", "w", encoding="utf-8") as f:
+            f.write(jd_text)
+        print("Job description saved to: data/job_descriptions/sample_jd.txt")
