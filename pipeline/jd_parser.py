@@ -6,9 +6,14 @@ import os
 def extract_job_description(url: str) -> str:
     """
     Extract plain text job description from a given URL.
+    Adds a User-Agent header to bypass bot protections.
     """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    }
+
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
     except Exception as e:
         return f"[ERROR] Could not fetch URL: {e}"
